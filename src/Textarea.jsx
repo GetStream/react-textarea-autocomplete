@@ -2,13 +2,13 @@
 /* eslint react/no-multi-comp: 0 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import getCaretCoordinates from "textarea-caret";
 import CustomEvent from "custom-event";
 
 import Listeners, { KEY_CODES } from "./listener";
-import List from "./List";
+// import List from "./List";
 
 import { defaultScrollToItem } from "./utilities";
 
@@ -23,16 +23,16 @@ import type {
 
 const DEFAULT_CARET_POSITION = "next";
 
-const POSITION_CONFIGURATION = {
-  X: {
-    LEFT: "rta__autocomplete--left",
-    RIGHT: "rta__autocomplete--right",
-  },
-  Y: {
-    TOP: "rta__autocomplete--top",
-    BOTTOM: "rta__autocomplete--bottom",
-  },
-};
+// const POSITION_CONFIGURATION = {
+//   X: {
+//     LEFT: "rta__autocomplete--left",
+//     RIGHT: "rta__autocomplete--right",
+//   },
+//   Y: {
+//     TOP: "rta__autocomplete--top",
+//     BOTTOM: "rta__autocomplete--bottom",
+//   },
+// };
 
 const errorMessage = (message: string) =>
   console.error(
@@ -66,150 +66,150 @@ const escapeRegex = (text) =>
     .join("");
 
 // The main purpose of this component is to figure out to which side the autocomplete should be opened
-type AutocompleteProps = {
-  style: ?Object,
-  className: ?string,
-  innerRef: () => void,
-  boundariesElement: string | HTMLElement,
-  top: ?number,
-  left: ?number,
-  children: *,
-  textareaRef: HTMLElement,
-  renderToBody: ?boolean,
-};
+// type AutocompleteProps = {
+//   style: ?Object,
+//   className: ?string,
+//   innerRef: () => void,
+//   boundariesElement: string | HTMLElement,
+//   top: ?number,
+//   left: ?number,
+//   children: *,
+//   textareaRef: HTMLElement,
+//   renderToBody: ?boolean,
+// };
 
-class Autocomplete extends React.Component<AutocompleteProps> {
-  containerElem: HTMLElement;
+// class Autocomplete extends React.Component<AutocompleteProps> {
+//   containerElem: HTMLElement;
 
-  ref: HTMLElement;
+//   ref: HTMLElement;
 
-  componentDidMount() {
-    const { boundariesElement } = this.props;
+//   componentDidMount() {
+//     const { boundariesElement } = this.props;
 
-    if (typeof boundariesElement === "string") {
-      const elem = document.querySelector(boundariesElement);
-      if (!elem) {
-        throw new Error(
-          "RTA: Invalid prop boundariesElement: it has to be string or HTMLElement."
-        );
-      }
-      this.containerElem = elem;
-    } else if (boundariesElement instanceof HTMLElement) {
-      this.containerElem = boundariesElement;
-    } else {
-      throw new Error(
-        "RTA: Invalid prop boundariesElement: it has to be string or HTMLElement."
-      );
-    }
+//     if (typeof boundariesElement === "string") {
+//       const elem = document.querySelector(boundariesElement);
+//       if (!elem) {
+//         throw new Error(
+//           "RTA: Invalid prop boundariesElement: it has to be string or HTMLElement."
+//         );
+//       }
+//       this.containerElem = elem;
+//     } else if (boundariesElement instanceof HTMLElement) {
+//       this.containerElem = boundariesElement;
+//     } else {
+//       throw new Error(
+//         "RTA: Invalid prop boundariesElement: it has to be string or HTMLElement."
+//       );
+//     }
 
-    if (!this.containerElem || !this.containerElem.contains(this.ref)) {
-      if (process.env.NODE_ENV !== "test") {
-        throw new Error(
-          "RTA: Invalid prop boundariesElement: it has to be one of the parents of the RTA."
-        );
-      }
-    }
-  }
+//     if (!this.containerElem || !this.containerElem.contains(this.ref)) {
+//       if (process.env.NODE_ENV !== "test") {
+//         throw new Error(
+//           "RTA: Invalid prop boundariesElement: it has to be one of the parents of the RTA."
+//         );
+//       }
+//     }
+//   }
 
-  componentDidUpdate() {
-    const top = this.props.top || 0;
-    const left = this.props.left || 0;
-    const usedClasses = [];
-    const unusedClasses = [];
+//   componentDidUpdate() {
+//     const top = this.props.top || 0;
+//     const left = this.props.left || 0;
+//     const usedClasses = [];
+//     const unusedClasses = [];
 
-    let topPosition = 0;
-    let leftPosition = 0;
+//     let topPosition = 0;
+//     let leftPosition = 0;
 
-    const containerBounds = this.containerElem.getBoundingClientRect();
-    const dropdownBounds = this.ref.getBoundingClientRect();
-    const textareaBounds = this.props.textareaRef.getBoundingClientRect();
-    const computedStyle = window.getComputedStyle(this.ref);
+//     const containerBounds = this.containerElem.getBoundingClientRect();
+//     const dropdownBounds = this.ref.getBoundingClientRect();
+//     const textareaBounds = this.props.textareaRef.getBoundingClientRect();
+//     const computedStyle = window.getComputedStyle(this.ref);
 
-    const marginTop = parseInt(
-      computedStyle.getPropertyValue("margin-top"),
-      10
-    );
-    const marginBottom = parseInt(
-      computedStyle.getPropertyValue("margin-bottom"),
-      10
-    );
-    const marginLeft = parseInt(
-      computedStyle.getPropertyValue("margin-left"),
-      10
-    );
-    const marginRight = parseInt(
-      computedStyle.getPropertyValue("margin-right"),
-      10
-    );
+//     const marginTop = parseInt(
+//       computedStyle.getPropertyValue("margin-top"),
+//       10
+//     );
+//     const marginBottom = parseInt(
+//       computedStyle.getPropertyValue("margin-bottom"),
+//       10
+//     );
+//     const marginLeft = parseInt(
+//       computedStyle.getPropertyValue("margin-left"),
+//       10
+//     );
+//     const marginRight = parseInt(
+//       computedStyle.getPropertyValue("margin-right"),
+//       10
+//     );
 
-    const dropdownBottom =
-      marginTop +
-      marginBottom +
-      textareaBounds.top +
-      top +
-      dropdownBounds.height;
-    const dropdownRight =
-      marginLeft +
-      marginRight +
-      textareaBounds.left +
-      left +
-      dropdownBounds.width;
+//     const dropdownBottom =
+//       marginTop +
+//       marginBottom +
+//       textareaBounds.top +
+//       top +
+//       dropdownBounds.height;
+//     const dropdownRight =
+//       marginLeft +
+//       marginRight +
+//       textareaBounds.left +
+//       left +
+//       dropdownBounds.width;
 
-    if (dropdownRight > containerBounds.right) {
-      leftPosition = left - dropdownBounds.width;
-      usedClasses.push(POSITION_CONFIGURATION.X.LEFT);
-      unusedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
-    } else {
-      leftPosition = left;
-      usedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
-      unusedClasses.push(POSITION_CONFIGURATION.X.LEFT);
-    }
+//     if (dropdownRight > containerBounds.right) {
+//       leftPosition = left - dropdownBounds.width;
+//       usedClasses.push(POSITION_CONFIGURATION.X.LEFT);
+//       unusedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
+//     } else {
+//       leftPosition = left;
+//       usedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
+//       unusedClasses.push(POSITION_CONFIGURATION.X.LEFT);
+//     }
 
-    if (dropdownBottom > containerBounds.bottom) {
-      topPosition = top - dropdownBounds.height;
-      usedClasses.push(POSITION_CONFIGURATION.Y.TOP);
-      unusedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
-    } else {
-      topPosition = top;
-      usedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
-      unusedClasses.push(POSITION_CONFIGURATION.Y.TOP);
-    }
+//     if (dropdownBottom > containerBounds.bottom) {
+//       topPosition = top - dropdownBounds.height;
+//       usedClasses.push(POSITION_CONFIGURATION.Y.TOP);
+//       unusedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
+//     } else {
+//       topPosition = top;
+//       usedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
+//       unusedClasses.push(POSITION_CONFIGURATION.Y.TOP);
+//     }
 
-    if (this.props.renderToBody) {
-      topPosition += textareaBounds.top;
-      leftPosition += textareaBounds.left;
-    }
+//     if (this.props.renderToBody) {
+//       topPosition += textareaBounds.top;
+//       leftPosition += textareaBounds.left;
+//     }
 
-    this.ref.style.top = `${topPosition}px`;
-    this.ref.style.left = `${leftPosition}px`;
+//     this.ref.style.top = `${topPosition}px`;
+//     this.ref.style.left = `${leftPosition}px`;
 
-    this.ref.classList.remove(...unusedClasses);
-    this.ref.classList.add(...usedClasses);
-  }
+//     this.ref.classList.remove(...unusedClasses);
+//     this.ref.classList.add(...usedClasses);
+//   }
 
-  render() {
-    const { style, className, innerRef, children, renderToBody } = this.props;
-    const body = document.body;
-    const autocompleteContainer = (
-      <div
-        ref={(ref) => {
-          // $FlowFixMe
-          this.ref = ref;
-          // $FlowFixMe
-          innerRef(ref);
-        }}
-        className={`rta__autocomplete ${className || ""}`}
-        style={style}
-      >
-        {children}
-      </div>
-    );
+//   render() {
+//     const { style, className, innerRef, children, renderToBody } = this.props;
+//     const body = document.body;
+//     const autocompleteContainer = (
+//       <div
+//         ref={(ref) => {
+//           // $FlowFixMe
+//           this.ref = ref;
+//           // $FlowFixMe
+//           innerRef(ref);
+//         }}
+//         className={`rta__autocomplete ${className || ""}`}
+//         style={style}
+//       >
+//         {children}
+//       </div>
+//     );
 
-    return renderToBody && body !== null
-      ? ReactDOM.createPortal(autocompleteContainer, body)
-      : autocompleteContainer;
-  }
-}
+//     return renderToBody && body !== null
+//       ? ReactDOM.createPortal(autocompleteContainer, body)
+//       : autocompleteContainer;
+//   }
+// }
 
 class ReactTextareaAutocomplete extends React.Component<
   TextareaProps,
@@ -218,6 +218,7 @@ class ReactTextareaAutocomplete extends React.Component<
   static defaultProps = {
     movePopupAsYouType: false,
     value: null,
+    maxRows: 10,
     minChar: 1,
     boundariesElement: "body",
     scrollToItem: true,
@@ -253,7 +254,8 @@ class ReactTextareaAutocomplete extends React.Component<
     dataLoading: false,
     selectionEnd: 0,
     component: null,
-    textToReplace: null,
+    // textToReplace: null,
+    listenerIndex: {},
   };
 
   escListenerInit = () => {
@@ -271,6 +273,26 @@ class ReactTextareaAutocomplete extends React.Component<
 
   componentDidMount() {
     Listeners.startListen(this.textareaRef);
+    Listeners.add(KEY_CODES.ESC, () => this._closeAutocomplete());
+    Listeners.add(KEY_CODES.SPACE, () => this._onSpace());
+
+    const listenerIndex = {};
+    const newSubmitKeys = this.props.keycodeSubmitKeys;
+
+      if (newSubmitKeys) {
+      const keycodeIndex = this.addKeycodeSubmitListeners(newSubmitKeys);
+      listenerIndex[keycodeIndex] = keycodeIndex;
+    } else {
+      const enterIndex = Listeners.add(KEY_CODES.ENTER, (e) => this._onEnter(e));
+      listenerIndex[enterIndex] = enterIndex;
+    }
+
+    this.setState({
+      listenerIndex,
+    });
+
+    Listeners.startListen();
+
     // handle caret change
     this.textareaRef &&
       this.textareaRef.addEventListener("focus", this._handleCaretChange);
@@ -303,6 +325,7 @@ class ReactTextareaAutocomplete extends React.Component<
   componentWillUnmount() {
     this.escListenerDestroy();
     Listeners.stopListen(this.textareaRef);
+    Listeners.remove(this.state.listenerIndex);
     // handle caret change
     this.textareaRef &&
       this.textareaRef.removeEventListener("focus", this._handleCaretChange);
@@ -382,9 +405,97 @@ class ReactTextareaAutocomplete extends React.Component<
     cleanLastTrigger();
   };
 
+
+  _onEnter = (event) => {
+    if (!this.textareaRef) return;
+
+    const trigger = this.state.currentTrigger;
+    const hasFocus = this.textareaRef.matches(':focus');
+
+    // Don't submit if the element doesn't have focus or the shift key is pressed, unless shift+Enter were provided as submit keys
+    if (
+      !hasFocus ||
+      (event.shiftKey === true && !this.keycodeSubmitShiftE) ||
+      (event.shiftKey === true && !this.props.keycodeSubmitKeys)
+    ) {
+      return;
+    }
+
+    if (!trigger || !this.state.data) {
+      // trigger a submit
+      this._replaceWord();
+      if (this.textareaRef) {
+        this.textareaRef.selectionEnd = 0;
+      }
+
+      console.log(event)
+      this.props.handleSubmit(event);
+      this._closeAutocomplete();
+    }
+  };
+
+  addKeycodeSubmitListeners = (keyCodes) => {
+    keyCodes.forEach((arrayOfCodes) => {
+      let submitValue = arrayOfCodes;
+      if (submitValue.length === 1) {
+        submitValue = submitValue[0];
+      }
+
+      // does submitted keycodes include shift+Enter?
+      const shiftE = arrayOfCodes.every((code) => [16, 13].includes(code));
+      if (shiftE) this.keycodeSubmitShiftE = true;
+
+      return Listeners.add(submitValue, (e) => this._onEnter(e));
+    });
+  };
+
+  _onSpace = () => {
+    if (!this.props.replaceWord || !this.textareaRef) return;
+
+    // don't change characters if the element doesn't have focus
+    const hasFocus = this.textareaRef.matches(':focus');
+    if (!hasFocus) return;
+
+    this._replaceWord();
+  };
+
+  _replaceWord = () => {
+    const { value } = this.state;
+
+    const lastWordRegex = /([^\s]+)(\s*)$/;
+    const match = lastWordRegex.exec(value.slice(0, this.getCaretPosition()));
+    const lastWord = match && match[1];
+
+    if (!lastWord) return;
+
+    const spaces = match[2];
+
+    const newWord = this.props.replaceWord(lastWord);
+    if (newWord == null) return;
+
+    const textBeforeWord = value.slice(0, this.getCaretPosition() - match[0].length);
+    const textAfterCaret = value.slice(this.getCaretPosition(), -1);
+    const newText = textBeforeWord + newWord + spaces + textAfterCaret;
+
+    this.setState(
+      {
+        value: newText,
+      },
+      () => {
+        // fire onChange event after successful selection
+        const e = new CustomEvent('change', { bubbles: true });
+        this.textareaRef.dispatchEvent(e);
+        if (this.props.onChange) this.props.onChange(e);
+      },
+    );
+  };
+
   _onSelect = (item: Object | string) => {
-    const { selectionEnd, currentTrigger, value: textareaValue } = this.state;
-    const { onItemSelected } = this.props;
+    const { selectionEnd, currentTrigger: stateTrigger, value: textareaValue } = this.state;
+    const { onItemSelected, closeCommandsList, closeMentionsList, showCommandsList, showMentionsList } = this.props;
+
+    // eslint-disable-next-line no-nested-ternary
+    const currentTrigger = showCommandsList ? '/' : showMentionsList ? '@' : stateTrigger;
 
     if (!currentTrigger) return;
 
@@ -433,7 +544,12 @@ class ReactTextareaAutocomplete extends React.Component<
       }
     };
 
-    const textToModify = textareaValue.slice(0, selectionEnd);
+    // eslint-disable-next-line no-nested-ternary
+    const textToModify = showCommandsList
+      ? '/'
+      : showMentionsList
+      ? '@'
+      : textareaValue.slice(0, selectionEnd);
 
     /**
      * It's important to escape the currentTrigger char for chars like [, (,...
@@ -492,6 +608,33 @@ class ReactTextareaAutocomplete extends React.Component<
         }
       }
     );
+    if (showCommandsList) closeCommandsList();
+    if (showMentionsList) closeMentionsList();
+  };
+
+    _getItemOnSelect = (paramTrigger) => {
+    const { currentTrigger: stateTrigger } = this.state;
+    const triggerSettings = this._getCurrentTriggerSettings(paramTrigger);
+
+    const currentTrigger = paramTrigger || stateTrigger;
+
+    if (!currentTrigger || !triggerSettings) return null;
+
+    const { callback } = triggerSettings;
+
+    if (!callback) return null;
+
+    return (item) => {
+      if (typeof callback !== 'function') {
+        throw new Error(
+          'Output functor is not defined! You have to define "output" function. https://github.com/webscopeio/react-textarea-autocomplete#trigger-type',
+        );
+      }
+      if (callback) {
+        return callback(item, currentTrigger);
+      }
+      return null;
+    };
   };
 
   _getTextToReplace = (currentTrigger: string): ?outputType => {
@@ -712,6 +855,19 @@ class ReactTextareaAutocomplete extends React.Component<
       "renderToBody",
       "onItemSelected",
       "onItemHighlighted",
+      'showCommandsList',
+      'showMentionsList',
+      'SuggestionItem',
+      'SuggestionList',
+      'closeCommandsList',
+      'closeMentionsList',
+      'replaceWord',
+      'CommandItem',
+      "UserItem",
+      'handleSubmit',
+      'keycodeSubmitKeys',
+      "TextAreaComponent"
+
     ];
 
     // eslint-disable-next-line
@@ -834,10 +990,7 @@ class ReactTextareaAutocomplete extends React.Component<
      * This setting means that there has to be whitespace before the token (on it has to be the the first character typed into textarea)
      */
     if (
-      currentTrigger &&
-      trigger[currentTrigger].afterWhitespace &&
-      !/\s/.test(value[selectionEnd - lastToken.length - 1]) &&
-      value[selectionEnd - lastToken.length - 1] !== undefined
+      currentTrigger && trigger[currentTrigger].afterWhitespace &&!/\s/.test(value[selectionEnd - lastToken.length - 1]) && value[selectionEnd - lastToken.length - 1] !== undefined
     ) {
       this._closeAutocomplete();
       return;
@@ -865,10 +1018,12 @@ class ReactTextareaAutocomplete extends React.Component<
         Object.keys(trigger).find(
           (a) =>
             a.slice(0, currentTriggerLength + 1) ===
+//  $FlowFixMe
             lastToken.slice(0, currentTriggerLength + 1)
         ) || null;
     }
 
+//  $FlowFixMe
     const actualToken = lastToken.slice(1);
 
     // if trigger is not configured step out from the function, otherwise proceed
@@ -887,13 +1042,13 @@ class ReactTextareaAutocomplete extends React.Component<
 
     this.escListenerInit();
 
-    const textToReplace = this._getTextToReplace(currentTrigger);
+    // const textToReplace = this._getTextToReplace(currentTrigger);
 
     this.setState(
       {
         selectionEnd,
         currentTrigger,
-        textToReplace,
+        // textToReplace,
         actualToken,
       },
       () => {
@@ -1015,6 +1170,91 @@ class ReactTextareaAutocomplete extends React.Component<
     this.textareaRef = ref;
   };
 
+    getTriggerProps = () => {
+    const {CommandItem, showCommandsList, showMentionsList, trigger, UserItem } = this.props;
+    const { component, currentTrigger, selectionEnd, value } = this.state;
+
+    const selectedItem = this._getItemOnSelect();
+    const suggestionData = this._getSuggestions();
+    const textToReplace = this._getTextToReplace();
+
+    const triggerProps = {
+      component,
+      currentTrigger,
+      getSelectedItem: selectedItem,
+      getTextToReplace: textToReplace,
+      selectionEnd,
+      value,
+      values: suggestionData,
+    };
+
+    if ((showCommandsList && trigger['/']) || (showMentionsList && trigger['@'])) {
+ 
+      let currentCommands;
+      const getCommands = trigger[showCommandsList ? '/' : '@'].dataProvider;
+
+      getCommands('', showCommandsList ? '/' : '@', (data) => {
+        currentCommands = data;
+      });
+
+
+      triggerProps.component = showCommandsList ? CommandItem : UserItem;
+      triggerProps.currentTrigger = showCommandsList ? '/' : '@';
+      triggerProps.getTextToReplace = this._getTextToReplace(showCommandsList ? '/' : '@');
+      triggerProps.getSelectedItem = this._getItemOnSelect(showCommandsList ? '/' : '@');
+      triggerProps.selectionEnd = 1;
+      triggerProps.value = showCommandsList ? '/' : '@';
+      triggerProps.values = currentCommands;
+    }
+
+
+    return triggerProps;
+  };
+
+  renderSuggestionListContainer() {
+    const {
+      disableMentions,
+      dropdownClassName,
+      dropdownStyle,
+      itemClassName,
+      itemStyle,
+      listClassName,
+      SuggestionItem,
+      SuggestionList,
+    } = this.props;
+
+    const triggerProps = this.getTriggerProps();
+
+    if (
+      triggerProps.values &&
+      triggerProps.currentTrigger &&
+      !(disableMentions && triggerProps.currentTrigger === '@')
+    ) {
+      return (
+        <div
+          className={`rta__autocomplete ${dropdownClassName || ''}`}
+          ref={(ref) => {
+            this.dropdownRef = ref;
+          }}
+          style={dropdownStyle}
+        >
+          <SuggestionList
+            className={listClassName}
+            dropdownScroll={this._dropdownScroll}
+            itemClassName={itemClassName}
+            itemStyle={itemStyle}
+            onSelect={this._onSelect}
+            SuggestionItem={SuggestionItem}
+            SuggestionList={SuggestionList}
+            {...triggerProps}
+          />
+        </div>
+      );
+    }
+
+    return null;
+  }
+
   props: TextareaProps;
 
   textareaRef: HTMLInputElement;
@@ -1034,35 +1274,35 @@ class ReactTextareaAutocomplete extends React.Component<
 
   render() {
     const {
-      loadingComponent: Loader,
+      // loadingComponent: Loader,
       style,
       className,
-      listStyle,
-      itemStyle,
-      boundariesElement,
-      movePopupAsYouType,
-      listClassName,
-      itemClassName,
-      dropdownClassName,
-      dropdownStyle,
+      // listStyle,
+      // itemStyle,
+      // boundariesElement,
+      // movePopupAsYouType,
+      // listClassName,
+      // itemClassName,
+      // dropdownClassName,
+      // dropdownStyle,
       containerStyle,
       containerClassName,
-      loaderStyle,
-      loaderClassName,
+      // loaderStyle,
+      // loaderClassName,
       textAreaComponent,
-      renderToBody,
+      // renderToBody,
     } = this.props;
     const {
-      left,
-      top,
+      // left,
+      // top,
       dataLoading,
-      component,
+      // component,
       value,
-      textToReplace,
+      // textToReplace,
     } = this.state;
 
-    const isAutocompleteOpen = this._isAutocompleteOpen();
-    const suggestionData = this._getSuggestions();
+    // const isAutocompleteOpen = this._isAutocompleteOpen();
+    // const suggestionData = this._getSuggestions();
     const extraAttrs = {};
     let TextAreaComponent;
     if (textAreaComponent.component) {
@@ -1073,6 +1313,9 @@ class ReactTextareaAutocomplete extends React.Component<
       extraAttrs.ref = this._textareaRef;
     }
 
+    let { maxRows } = this.props;
+    if (!this.props.grow) maxRows = 1;
+
     return (
       <div
         className={`rta ${
@@ -1080,6 +1323,7 @@ class ReactTextareaAutocomplete extends React.Component<
         } ${containerClassName || ""}`}
         style={containerStyle}
       >
+        {this.renderSuggestionListContainer()}
         <TextAreaComponent
           {...this._cleanUpProps()}
           className={`rta__textarea ${className || ""}`}
@@ -1093,9 +1337,11 @@ class ReactTextareaAutocomplete extends React.Component<
           onBlur={this._onBlur}
           value={value}
           style={style}
+          maxRows={maxRows}
           {...extraAttrs}
         />
-        {isAutocompleteOpen && (
+        <h1>HELLO</h1>
+        {/* {isAutocompleteOpen && (
           <Autocomplete
             innerRef={(ref) => {
               // $FlowFixMe
@@ -1137,7 +1383,7 @@ class ReactTextareaAutocomplete extends React.Component<
               </div>
             )}
           </Autocomplete>
-        )}
+        )} */}
       </div>
     );
   }

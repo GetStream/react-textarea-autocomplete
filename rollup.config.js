@@ -21,15 +21,18 @@ const createConfig = ({ umd = false, output } = {}) => ({
   onwarn: () => null,
   plugins: [
     babel({ runtimeHelpers: true }),
-    resolve(),
     commonjs({ extensions: [".js", ".jsx"] }),
     umd && uglify(),
     license({
       banner: {
         file: path.join(__dirname, "LICENSE")
       }
-    })
-  ].filter(Boolean)
+    }),
+    resolve(),
+  ].filter(Boolean),
+    watch:{
+      include:'src/**'
+    }
 });
 
 export default [
